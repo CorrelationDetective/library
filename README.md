@@ -33,10 +33,10 @@ Before using Correlation Detective, make sure you have the following prerequisit
 
    ```xml
    <dependency>
-    <groupId>io.github.correlationdetective</groupId>
-    <artifactId>CorrelationDetective</artifactId>
-    <version>1.0</version>
-    </dependency>
+       <groupId>io.github.correlationdetective</groupId>
+       <artifactId>CorrelationDetective</artifactId>
+       <version>1.0</version>
+   </dependency>
    ```
 
 #### Option 2: Clone the Correlation Detective github repository
