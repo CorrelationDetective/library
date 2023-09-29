@@ -23,7 +23,7 @@ Correlation Detective is a fast and scalable family of algorithms for finding in
 
 Before using Correlation Detective, make sure you have the following prerequisites installed:
 
-- Java 8 or later
+- Java 11 or later
 - Maven (for building the project)
 
 ### Installation
@@ -160,7 +160,8 @@ That's it! You are now ready to use Correlation Detective to discover interestin
 Explore the project documentation for more details and advanced usage options.
 
 ## Examples
-The examples are implemented as unit tests in src.test.java.library.LibraryUsageTest.java. You can run this test to see the examples in action.
+The examples are implemented as unit tests in [LibraryUsageTest](src/test/java/library/LibraryUsageTest.java). 
+You can run this test to see the examples in action.
 
 ## Documentation
 ### Parameters and Configuration
