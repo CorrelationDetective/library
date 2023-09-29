@@ -12,15 +12,39 @@ import org.apache.commons.lang3.time.StopWatch;
 import queries.ResultSet;
 import similarities.SimEnum;
 
+/**
+ * CorrelationDetective is an algorithm for finding interesting multivariate correlations in vector datasets.
+ * It extends the Algorithm class and provides methods for running the correlation detection process.
+ */
 public class CorrelationDetective extends Algorithm {
+
+    /**
+     * Constructs a CorrelationDetective instance with the given RunParameters.
+     *
+     * @param runParameters The RunParameters specifying the configuration for the algorithm.
+     */
     public CorrelationDetective(@NonNull RunParameters runParameters) {
         super(runParameters);
     }
 
+    /**
+     * Constructs a CorrelationDetective instance with the provided parameters.
+     *
+     * @param inputPath      The path to the input dataset.
+     * @param simMetricName  The similarity metric to use.
+     * @param maxPLeft       The maximum value of P for the left side of the correlation pattern.
+     * @param maxPRight      The maximum value of P for the right side of the correlation pattern.
+     */
     public CorrelationDetective(@NonNull String inputPath, @NonNull SimEnum simMetricName, int maxPLeft, int maxPRight) {
         super(inputPath, simMetricName, maxPLeft, maxPRight);
     }
 
+    /**
+     * Runs the Correlation Detective algorithm to find interesting multivariate correlations in the dataset,
+     * following the query configuration specified through the RunParameters.
+     *
+     * @return The ResultSet containing the detected correlations.
+     */
     @Override
     public ResultSet run() {
 //        Initialize the parameters

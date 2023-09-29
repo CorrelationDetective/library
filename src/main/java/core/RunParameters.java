@@ -39,28 +39,27 @@ public class RunParameters {
         double max();
     }
 
-//    Required
+//  ---------------------------  Required parameters  ---------------------------
     @Expose @NonNull @Getter @Setter private String inputPath;
     @Expose @NonNull @Getter @Setter private SimEnum simMetricName;
-    @Expose @NonNull @Between(min = 1, max = Double.MAX_VALUE) @Getter @Setter private  Integer maxPLeft;
-    @Expose @NonNull @Between(min = 0, max = Double.MAX_VALUE) @Getter @Setter private  Integer maxPRight;
+    @Expose @NonNull @Between(min = 1, max = 10) @Getter @Setter private  Integer maxPLeft;
+    @Expose @NonNull @Between(min = 0, max = 10) @Getter @Setter private  Integer maxPRight;
 
 
-//    Helpers
+//  ---------------------------  Helpers  ---------------------------
             @Getter private Gson gson = new GsonBuilder()
         .excludeFieldsWithoutExposeAnnotation()
         .excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT)
         .create();
 
-//    Logging
+//  --------------------------- Logging ---------------------------
             @Getter @Setter private  Level logLevel = Level.INFO;
     @Expose @Getter         private String dateTime = (new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss")).format(new Date());
-            @Getter @Setter private  boolean saveStats = true;
             @Getter @Setter private  boolean monitorStats = true;
 
     @Expose @Getter private int threads = FastMath.min(80, Runtime.getRuntime().availableProcessors()*4);
 
-    //    Run details
+//  ---------------------------  Run details ---------------------------
             @Getter @Setter private  AlgorithmEnum algorithm = AlgorithmEnum.SIMILARITY_DETECTIVE;
 
     @Expose @Getter @Setter private  boolean parallel = true;
@@ -68,7 +67,7 @@ public class RunParameters {
     @Expose @Getter @Setter private  int seed = 0;
             @Getter private  ForkJoinPool forkJoinPool = new ForkJoinPool(threads);
 
-    //    Query
+//  ---------------------------  Query ---------------------------
     @Expose @Getter @Setter private  QueryTypeEnum queryType;
 
             @Getter @Setter private  MultivariateSimilarityFunction simMetric;
@@ -76,59 +75,59 @@ public class RunParameters {
     @Expose @Getter @Setter private  RunningThreshold runningThreshold;
     @Expose @Between(min = 0, max = Double.MAX_VALUE) @Getter @Setter private  double minJump = 0;
     @Expose @Getter @Setter private  boolean irreducibility = false;
-    @Expose @Between(min = 0, max = Double.MAX_VALUE) @Getter @Setter private  int topK = 100;
+    @Expose @Between(min = 0, max = 100_000) @Getter @Setter private  int topK = 100;
 
     @Expose @Getter @Setter private  boolean allowVectorOverlap = false;
             @Getter @Setter private  ResultSet resultSet;
 
-    //    Data
+//  ---------------------------  Data ---------------------------
             @Getter private  String[] headers;
             @Getter private  double[][] data;
             @Getter @Setter private double[][] orgData;
-    @Expose @Between(min = 1, max = Double.MAX_VALUE) @Getter @Setter private  int nVectors = (int) 1e9;
-    @Expose @Between(min = 1, max = Double.MAX_VALUE) @Getter @Setter private  int nDimensions = (int) 1e9;
-    @Expose @Between(min = 0, max = Double.MAX_VALUE) @Getter @Setter private  int partition;
+    @Expose @Between(min = 1, max = Integer.MAX_VALUE) @Getter @Setter private  int nVectors = (int) 1e9;
+    @Expose @Between(min = 1, max = Integer.MAX_VALUE) @Getter @Setter private  int nDimensions = (int) 1e9;
+    @Expose @Between(min = 0, max = Integer.MAX_VALUE) @Getter @Setter private  int partition;
 
-    //    Dimensionality reduction
+//  ---------------------------  Dimensionality reduction ---------------------------
     @Expose @Getter @Setter private  boolean dimensionalityReduction;
     @Expose @Between(min = 0, max = 1) @Getter @Setter private  double dimredEpsilon = 0.1;
     @Expose @Between(min = 0, max = 1) @Getter @Setter private  double dimredDelta = 0.8;
     @Expose @Getter @Setter private  boolean dimredCorrect = true;
-    @Expose @Getter @Setter private @Between(min = 1, max = Double.MAX_VALUE)  Integer dimredComponents = null;
+    @Expose @Getter @Setter private @Between(min = 1, max = Integer.MAX_VALUE)  Integer dimredComponents = null;
 
-    //    Discounting
+//  ---------------------------  Discounting ---------------------------
     @Expose  @Getter @Setter private  boolean discounting = false;
     @Expose @Between(min = 0, max = 2) @Getter @Setter private  double discountThreshold = .7;
-    @Expose @Between(min = 1, max = Double.MAX_VALUE) @Getter @Setter private  int discountTopK = 10; // The amount of extrema distances to store for each CC.
-    @Expose @Between(min = 1, max = Double.MAX_VALUE) @Getter @Setter private  int discountStep = 1;
+    @Expose @Between(min = 1, max = Integer.MAX_VALUE) @Getter @Setter private  int discountTopK = 10; // The amount of extrema distances to store for each CC.
+    @Expose @Between(min = 1, max = Integer.MAX_VALUE) @Getter @Setter private  int discountStep = 1;
 
-    //    Bounding
+//  ---------------------------  Bounding ---------------------------
     @Expose @Getter @Setter private  boolean empiricalBounding = true;
             @Getter @Setter private RecursiveBounding RB;
 
-    //    Clustering
+//  ---------------------------  Clustering ---------------------------
             @Getter @Setter private HierarchicalClustering HC;
             @Getter @Setter private BoundDiscounting BD;
 
-    @Expose @Between(min = 1, max = Double.MAX_VALUE) @Getter @Setter private  Integer kMeans = null;
+    @Expose @Between(min = 1, max = Integer.MAX_VALUE) @Getter @Setter private  Integer kMeans = null;
     @Expose @Getter @Setter private  boolean geoCentroid = false;
     @Expose @Between(min = 0, max = Double.MAX_VALUE) @Getter @Setter private  double startEpsilon;
     @Expose @Between(min = 0, max = 1) @Getter @Setter private  double epsilonMultiplier = 0.8;
-    @Expose @Between(min = 1, max = Double.MAX_VALUE) @Getter @Setter private  int maxLevels = 20;
+    @Expose @Between(min = 1, max = Integer.MAX_VALUE) @Getter @Setter private  int maxLevels = 20;
     @Expose @Getter @Setter private  ClusteringAlgorithmEnum clusteringAlgorithm = ClusteringAlgorithmEnum.KMEANS;
-    @Expose @Between(min = 0, max = Double.MAX_VALUE) @Getter @Setter private  int breakFirstKLevelsToMoreClusters = 0;
-    @Expose @Between(min = 1, max = Double.MAX_VALUE) @Getter @Setter private  int clusteringRetries = 20;
+    @Expose @Between(min = 0, max = Integer.MAX_VALUE) @Getter @Setter private  int breakFirstKLevelsToMoreClusters = 0;
+    @Expose @Between(min = 1, max = Integer.MAX_VALUE) @Getter @Setter private  int clusteringRetries = 20;
 
-    @Expose @Between(min = 1, max = Double.MAX_VALUE) @Getter @Setter private  int hashSize;
+    @Expose @Between(min = 1, max = Integer.MAX_VALUE) @Getter @Setter private  int hashSize;
 
-//    Routing
+//  ---------------------------  Routing ---------------------------
     @Expose @Between(min = 0, max = 1) @Getter @Setter private  double BFSRatio = 0.5;
     @Expose @Getter @Setter private  double BFSFactor;
 
-    //    Top-k
+//  ---------------------------  Top-k ---------------------------
     @Expose @Getter @Setter private  double shrinkFactor = 0;
 
-//    Misc
+//  ---------------------------  Misc ---------------------------
             @Getter private  StatBag statBag;
             @Getter private  Random randomGenerator;
             @Getter private  double[][] pairwiseDistances;

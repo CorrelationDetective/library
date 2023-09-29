@@ -37,7 +37,6 @@ public abstract class GeneralTest {
         runParameters.setKMeans(10);
         runParameters.setParallel(false);
         runParameters.setRandom(false);
-        runParameters.setSaveStats(false);
 
         runParameters.init();
 

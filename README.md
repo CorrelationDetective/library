@@ -13,6 +13,8 @@ Correlation Detective is a fast and scalable family of algorithms for finding in
     - [Interacting with the ResultSet](#interacting-with-the-resultset)
     - [Accessing Statistics](#accessing-statistics)
     - [Saving Results](#saving-results)
+- [Examples](#examples)
+- [Documentation](#documentation)
 - [License](#license)
 
 ## Getting Started
@@ -42,7 +44,7 @@ Before using Correlation Detective, make sure you have the following prerequisit
     mvn clean install
     ```
 ## Usage
-**Note:** The following examples are also implemented as a unit test in src.test.java.library.LibraryUsageTest.java. 
+**Note:** The following examples are also implemented as a unit test in src.test.java.library.LibraryUsageTest.java.
 You can run this test to see the examples in action.
 
 ### Initializing the CorrelationDetective Object
@@ -154,8 +156,20 @@ statBag.saveAsCSV(outputDir + "/stats.csv");
 statBag.saveAsJson(outputDir + "/stats.json");
 ```
 
-That's it! You are now ready to use Correlation Detective to discover interesting multivariate correlations in your vector datasets. 
+That's it! You are now ready to use Correlation Detective to discover interesting multivariate correlations in your vector datasets.
 Explore the project documentation for more details and advanced usage options.
+
+## Examples
+The examples are implemented as unit tests in src.test.java.library.LibraryUsageTest.java. You can run this test to see the examples in action.
+
+## Documentation
+### Parameters and Configuration
+
+For detailed information about the parameters and configuration options available in Correlation Detective, 
+please refer to the [**PARAMETERS.md**](PARAMETERS.md) file. 
+This document provides an overview of all configurable settings in the `RunParameters` class, 
+which allows you to fine-tune the behavior of the algorithm for your specific needs.
+We refer to our [paper](https://vldb.org/pvldb/vol15/p1266-papapetrou.pdf) for more details about the parameters and their effects on the algorithm.
 
 ## License
 This project is licensed under the GNU GPL v3 License - see the [LICENSE](LICENSE) file for details.
