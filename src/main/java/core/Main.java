@@ -1,0 +1,129 @@
+package core;
+
+import _aux.lib;
+import algorithms.Algorithm;
+import algorithms.baselines.SimpleBaseline;
+import algorithms.baselines.SmartBaseline;
+import algorithms.performance.CorrelationDetective;
+import similarities.SimEnum;
+
+import java.util.*;
+import java.util.logging.Logger;
+
+public class Main {
+    public static void main(String[] args) {
+//        Run default query
+        if (args.length == 0){
+            args = new String[]{
+                    "--inputPath=" + "/home/jens/tue/data/stock/1620daily/stocks_1620daily_logreturn_deduped.csv",
+                    "--simMetricName=" + "pearson_correlation",
+                    "--maxPLeft=" + "1",
+                    "--maxPRight=" + "2",
+                    "--n=" + "100",
+            };
+        }
+
+//        Read parameters from args
+        RunParameters runParameters = parseArgs(args);
+
+//        Initialize the parameters and logger
+        runParameters.init();
+
+//        Run the query
+        run(runParameters);
+    }
+
+    public static RunParameters parseArgs(String[] args){
+        // Parse necessary arguments (and delete them from the list)
+        RunParameters runParameters = parseRequired(args);
+
+        if (args.length == 4){
+            return runParameters;
+        }
+
+        // Iterate through the optional command-line arguments
+        for (int i=4; i<args.length; i++) {
+            try {
+                String arg = args[i];
+                if (arg.startsWith("--")) {
+                    parseNamedArg(runParameters, arg);
+                } else if (arg.startsWith("-")) {
+//                If second argument is not present, make sure that the first argument is a boolean
+                    if (i + 1 < args.length) {
+                        if (args[i + 1].startsWith("-")) {
+                            parseAbbreviatedArg(runParameters, arg, "true");
+                        } else {
+                            parseAbbreviatedArg(runParameters, arg, args[i + 1]);
+                            i++;
+                        }
+                    } else {
+                        parseAbbreviatedArg(runParameters, arg, "true");
+                    }
+                } else {
+                    throw new InputMismatchException("Invalid format for option: " + arg);
+                }
+            } catch (NoSuchFieldException e){
+                throw new InputMismatchException("Invalid option: " + e.getMessage());
+            } catch (IllegalAccessException e){
+                throw new InputMismatchException("Invalid value for option: " + e.getMessage());
+            }
+        }
+
+        return runParameters;
+    }
+
+    private static RunParameters parseRequired(String[] args){
+        String inputInstructions = ", mind that the first 5 arguments should be <inputPath> <outputPath> <simMetricName> <maxPLeft> <maxPRight>";
+
+        // Parse necessary arguments (first 5 non-named or abbreviated arguments)
+        if (args.length < 4){
+            throw new InputMismatchException("Not enough arguments" + inputInstructions);
+        }
+        int i = 0;
+        try {
+            String inputPath = args[i++];
+            SimEnum simMetricName = SimEnum.valueOf(args[i++].toUpperCase());
+            int maxPLeft = Integer.parseInt(args[i++]);
+            int maxPRight = Integer.parseInt(args[i++]);
+
+            return new RunParameters(inputPath, simMetricName, maxPLeft, maxPRight);
+        } catch (NumberFormatException e){
+            throw new InputMismatchException("Invalid format for option: " + args[i] + inputInstructions);
+        }
+    }
+
+    private static void parseAbbreviatedArg(RunParameters runParameters, String arg1, String arg2) throws NoSuchFieldException, IllegalAccessException{
+//        Check if the argument is in the form -key value
+        String key = arg1.substring(1);
+        Object value = lib.parseString(arg2);
+        runParameters.set(key, value);
+    }
+
+    private static void parseNamedArg(RunParameters runParameters, String arg) throws NoSuchFieldException, IllegalAccessException{
+        // Check if the argument is in the form --key=value
+        int equalsIndex = arg.indexOf('=');
+        if (equalsIndex != -1) {
+            String key = arg.substring(2, equalsIndex);
+            Object value = lib.parseString(arg.substring(equalsIndex + 1));
+            runParameters.set(key, value);
+        } else {
+            throw new InputMismatchException("Invalid format for option: " + arg);
+        }
+    }
+
+    private static void run(RunParameters runParameters) {
+        Logger.getGlobal().info(String.format("---- Running %s %s query with pattern (%d,%d) on %d vectors",
+                runParameters.getSimMetricName(), runParameters.getAlgorithm(), runParameters.getMaxPLeft(),
+                runParameters.getMaxPRight(), runParameters.getNVectors()));
+
+        Algorithm algorithm;
+        switch (runParameters.getAlgorithm()){
+            case SIMILARITY_DETECTIVE: default: algorithm = new CorrelationDetective(runParameters); break;
+            case SIMPLE_BASELINE: algorithm = new SimpleBaseline(runParameters); break;
+            case SMART_BASELINE: algorithm = new SmartBaseline(runParameters); break;
+        }
+
+        //        Print the results as json
+        System.out.println(algorithm.getRunJson());
+    }
+}
