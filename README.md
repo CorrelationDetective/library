@@ -66,11 +66,6 @@ To get started with Correlation Detective, you need to initialize a 'Correlation
 
 ### Option 1: Create CorrelationDetective object directly
 ```java
-import src.main.java.algorithms.performance.CorrelationDetective;
-import src.main.java.algorithms.performance.RunParameters;
-import src.main.java.algorithms.performance.enums.QueryTypeEnum;
-import src.main.java.algorithms.performance.enums.SimEnum;
-
 // Define necessary parameters
 String inputPath = "/path/to/your/dataset.csv";
 SimEnum simMetricName = SimEnum.PEARSON_CORRELATION;
@@ -78,21 +73,16 @@ int maxPLeft = 1;
 int maxPRight = 2;
 
 // Create CorrelationDetective object directly
-CorrelationDetective sd = new CorrelationDetective(inputPath, simMetricName, maxPLeft, maxPRight);
+CorrelationDetective cd = new CorrelationDetective(inputPath, simMetricName, maxPLeft, maxPRight);
 
 // Set optional parameters
-sd.runParameters.setQueryType(QueryTypeEnum.THRESHOLD);
-sd.runParameters.setTau(0.7);
-sd.runParameters.setNVectors(200);
+cd.runParameters.setQueryType(QueryTypeEnum.THRESHOLD);
+cd.runParameters.setTau(0.7);
+cd.runParameters.setNVectors(200);
 ```
 
 ### Option 2: Create CorrelationDetective object using a RunParameters object
 ```java
-import src.main.java.algorithms.performance.CorrelationDetective;
-import src.main.java.algorithms.performance.RunParameters;
-import src.main.java.algorithms.performance.enums.QueryTypeEnum;
-import src.main.java.algorithms.performance.enums.SimEnum;
-
 // Define necessary parameters
 String inputPath = "/path/to/your/dataset.csv";
 SimEnum simMetricName = SimEnum.PEARSON_CORRELATION;
@@ -108,21 +98,18 @@ runParameters.setTau(0.7);
 runParameters.setNVectors(200);
 
 // Create CorrelationDetective object using RunParameters
-CorrelationDetective sd = new CorrelationDetective(runParameters);
+CorrelationDetective cd = new CorrelationDetective(runParameters);
 ```
 
 ### Running the Query
 Once you have initialized a CorrelationDetective object, you can run the query using the following command:
 ```java
-ResultSet rs = sd.run();
+ResultSet rs = cd.run();
 ```
 
 ### Interacting with the ResultSet
 You can interact with the 'ResultSet' object to access the results of your query. Here's how you can get started:
 ```java
-import src.main.java.algorithms.performance.ResultSet;
-import src.main.java.algorithms.performance.ResultTuple;
-
 // Get the number of results
 int numResults = resultSet.size();
 System.out.println("Number of results: " + numResults);
@@ -141,10 +128,8 @@ for (int i = 0; i < 10; i++) {
 ### Accessing Statistics
 To access statistics related to your query, you can use the 'StatBag' object:
 ```java
-import src.main.java.algorithms.performance.StatBag;
-
 // Get the StatBag object
-StatBag statBag = sd.getStatBag();
+StatBag statBag = cd.getStatBag();
 
 // Print some statistics
 System.out.println("Total duration: " + statBag.getTotalDuration());
@@ -155,9 +140,6 @@ statBag.printStageDurations();
 ### Saving Results
 You can save both the results and statistics as CSV and JSON files for further analysis:
 ```java
-import src.main.java.algorithms.performance.ResultSet;
-import src.main.java.algorithms.performance.StatBag;
-
 // Define the output directory
 String outputDir = "/path/to/output/directory";
 
