@@ -28,6 +28,18 @@ Before using Correlation Detective, make sure you have the following prerequisit
 
 ### Installation
 
+#### Option 1: Install using Maven
+1. Add the following dependency to your pom.xml file:
+
+   ```xml
+   <dependency>
+    <groupId>io.github.correlationdetective</groupId>
+    <artifactId>CorrelationDetective</artifactId>
+    <version>1.0</version>
+    </dependency>
+   ```
+
+#### Option 2: Clone the Correlation Detective github repository
 1. Clone the Correlation Detective repository to your local machine:
 
    ```bash
@@ -43,6 +55,8 @@ Before using Correlation Detective, make sure you have the following prerequisit
    ```bash
     mvn clean install
     ```
+
+
 ## Usage
 **Note:** The following examples are also implemented as a unit test in src.test.java.library.LibraryUsageTest.java.
 You can run this test to see the examples in action.

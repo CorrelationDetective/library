@@ -5,13 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
 
 <!--    Project Information       -->
-    <groupId>org.example</groupId>
+    <groupId>io.github.correlationdetective</groupId>
     <artifactId>CorrelationDetective</artifactId>
-    <version>1.0</version>
+    <version>1.0.0</version>
+
+    <name>Correlation Detective</name>
     <description>
-        Correlation Detective is a fast and scalable family of algorithms for finding interesting multivariate correlations in vector datasets.
+        Fast and scalable family of algorithms for finding interesting multivariate correlations in vector datasets.
     </description>
-    <url>https://correlationdetective.com/</url>
+    <url>https://github.com/CorrelationDetective/library</url>
+
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -19,6 +22,7 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
     <developers>
         <developer>
             <name>Jens E. d'Hondt</name>
@@ -27,11 +31,11 @@
             <organizationUrl>https://www.tue.nl/en/</organizationUrl>
         </developer>
     </developers>
-    <scm>
-        <url>https://github.com/CorrelationDetective/public</url>
-        <connection>scm:git:git://github.com/CorrelationDetective/public.git</connection>
-    </scm>
 
+    <scm>
+        <url>https://github.com/CorrelationDetective/library.git</url>
+        <connection>scm:git:git://github.com/CorrelationDetective/library.git</connection>
+    </scm>
 
 <!--    Dependencies       -->
     <dependencies>
