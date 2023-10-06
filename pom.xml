@@ -4,17 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-<!--    Project Information       -->
-    <groupId>io.github.correlationdetective</groupId>
+    <!--    Project Information       -->
+    <groupId>org.example</groupId>
     <artifactId>CorrelationDetective</artifactId>
-    <version>1.0.0</version>
-
-    <name>Correlation Detective</name>
+    <version>1.0</version>
     <description>
-        Fast and scalable family of algorithms for finding interesting multivariate correlations in vector datasets.
+        Correlation Detective is a fast and scalable family of algorithms for finding interesting multivariate correlations in vector datasets.
     </description>
-    <url>https://github.com/CorrelationDetective/library</url>
-
+    <url>https://correlationdetective.com/</url>
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -22,7 +19,6 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-
     <developers>
         <developer>
             <name>Jens E. d'Hondt</name>
@@ -31,13 +27,13 @@
             <organizationUrl>https://www.tue.nl/en/</organizationUrl>
         </developer>
     </developers>
-
     <scm>
         <url>https://github.com/CorrelationDetective/library.git</url>
         <connection>scm:git:git://github.com/CorrelationDetective/library.git</connection>
     </scm>
 
-<!--    Dependencies       -->
+
+    <!--    Dependencies       -->
     <dependencies>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -95,7 +91,7 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
-<!--    Build       -->
+    <!--    Build       -->
     <build>
         <pluginManagement>
             <plugins>
@@ -132,7 +128,7 @@
         </pluginManagement>
     </build>
 
-<!--    Profiles       -->
+    <!--    Profiles       -->
     <profiles>
         <profile>
             <id>release</id>
@@ -192,7 +188,7 @@
         </profile>
     </profiles>
 
-<!--    Distribution manager-->
+    <!--    Distribution manager-->
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
