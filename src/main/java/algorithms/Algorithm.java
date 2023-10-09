@@ -20,7 +20,7 @@ public abstract class Algorithm {
 
     public void printRunParameters(){
         Logger.getGlobal().info(String.format("---- Running %s %s query with pattern (%d,%d) on %d vectors",
-                runParameters.getSimMetricName(), runParameters.getAlgorithm(), runParameters.getMaxPLeft(),
+                runParameters.getSimMetricName(), runParameters.getQueryType(), runParameters.getMaxPLeft(),
                 runParameters.getMaxPRight(), runParameters.getNVectors()));
     }
 

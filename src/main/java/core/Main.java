@@ -155,6 +155,9 @@ public class Main {
         StatBag statBag = runParameters.getStatBag();
         ResultSet resultSet = runParameters.getResultSet();
 
+//        Save the parameters as a json file
+        outputHandler.writeToFile(outputPath + "/parameters.json", runParameters.toJson());
+
 //        Save the statBag as a json file
         outputHandler.writeToFile(outputPath + "/stats.json", statBag.toJson());
 
