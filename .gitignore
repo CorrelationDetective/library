@@ -6,6 +6,7 @@ output/
 analysis/
 math_checks/
 sql/
+how_to_publish_docker.md
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

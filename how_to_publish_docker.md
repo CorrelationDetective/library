@@ -11,7 +11,7 @@ Instructions on how to push a new version of the docker image to the CD dockerhu
     ```bash
     docker build -t correlationdetective/correlationdetective .
     ```
-3Push the docker image to dockerhub:
+3. Push the docker image to dockerhub:
     ```bash
     docker push correlationdetective/correlationdetective
     ```
