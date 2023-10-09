@@ -6,6 +6,7 @@ import bounding.ClusterCombination;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import core.RunParameters;
+import data_io.FileHandler;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -223,6 +224,13 @@ public class ResultSet {
         return gson.toJson(resultTuples);
     }
 
+    public String toJson() {
+        if (resultTuples == null) {
+            this.close();
+        }
+        return runParameters.getGson().toJson(resultTuples);
+    }
+
     public JsonElement toJsonElement(Gson gson) {
         if (resultTuples == null) {
             this.close();
@@ -267,6 +275,6 @@ public class ResultSet {
     }
 
     public void saveAsJson(String outputPath){
-        lib.stringToFile(toJson(runParameters.getGson()), outputPath);
+        new FileHandler().writeToFile(outputPath, toJson(runParameters.getGson()));
     }
 }

@@ -7,6 +7,7 @@ import algorithms.AlgorithmEnum;
 import com.google.common.util.concurrent.AtomicDouble;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
+import data_io.FileHandler;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -230,6 +231,6 @@ public class StatBag {
     }
 
     public void saveAsJson(String outputPath){
-        lib.stringToFile(toJson(), outputPath);
+        new FileHandler().writeToFile(outputPath, toJson());
     }
 }

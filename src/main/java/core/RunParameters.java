@@ -10,7 +10,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
-import data_reading.DataReader;
+import data_io.DataHandler;
+import data_io.FileHandler;
+import data_io.MinioHandler;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +41,7 @@ public class RunParameters {
         double max();
     }
 
+
 //  ---------------------------  Required parameters  ---------------------------
     @Expose @NonNull @Getter @Setter private String inputPath;
     @Expose @NonNull @Getter @Setter private SimEnum simMetricName;
@@ -46,21 +49,26 @@ public class RunParameters {
     @Expose @NonNull @Between(min = 0, max = 10) @Getter @Setter private  Integer maxPRight;
 
 
-//  ---------------------------  Helpers  ---------------------------
-            @Getter private Gson gson = new GsonBuilder()
-        .excludeFieldsWithoutExposeAnnotation()
-        .excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT)
-        .create();
+    //  ---------------------------  Helpers  ---------------------------
+    @Getter private Gson gson = new GsonBuilder()
+            .excludeFieldsWithoutExposeAnnotation()
+            .excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT)
+            .serializeSpecialFloatingPointValues()
+            .create();
+    @Getter private DataHandler inputHandler;
+    @Getter private DataHandler outputHandler;
+    public static String S3_PREFIX = "s3://";
 
-//  --------------------------- Logging ---------------------------
-            @Getter @Setter private  Level logLevel = Level.INFO;
+    //  --------------------------- Logging ---------------------------
+    @Getter @Setter private  Level logLevel = Level.INFO;
     @Expose @Getter         private String dateTime = (new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss")).format(new Date());
-            @Getter @Setter private  boolean monitorStats = true;
+    @Getter @Setter private  boolean monitorStats = true;
 
     @Expose @Getter private int threads = FastMath.min(80, Runtime.getRuntime().availableProcessors()*4);
+    @Expose @Getter @Setter private String outputPath;
 
-//  ---------------------------  Run details ---------------------------
-            @Getter @Setter private  AlgorithmEnum algorithm = AlgorithmEnum.SIMILARITY_DETECTIVE;
+    //  ---------------------------  Run details ---------------------------
+    @Getter @Setter private  AlgorithmEnum algorithm = AlgorithmEnum.SIMILARITY_DETECTIVE;
 
     @Expose @Getter @Setter private  boolean parallel = true;
     @Expose @Getter @Setter private  boolean random = true;
@@ -68,7 +76,7 @@ public class RunParameters {
             @Getter private  ForkJoinPool forkJoinPool = new ForkJoinPool(threads);
 
 //  ---------------------------  Query ---------------------------
-    @Expose @Getter @Setter private  QueryTypeEnum queryType;
+    @Expose @Getter @Setter private  QueryTypeEnum queryType = QueryTypeEnum.TOPK;
 
             @Getter @Setter private  MultivariateSimilarityFunction simMetric;
     @Expose @Getter @Setter private  double tau;
@@ -178,6 +186,7 @@ public class RunParameters {
     private  void check(){
         checkRequired();
 
+        checkDataParameters();
         dimensionalityReductionChecks();
         queryTypeChecks();
         queryConstraintChecks();
@@ -234,8 +243,17 @@ public class RunParameters {
         }
     }
 
+//    Check dataset parameters
+    private void checkDataParameters(){
+//        Check which filesystem is used for input and output
+        inputHandler = inputPath.startsWith(S3_PREFIX) ? new MinioHandler(): new FileHandler();
+        if (outputPath != null){
+            outputHandler = outputPath.startsWith(S3_PREFIX) ? new MinioHandler(): new FileHandler();
+        }
+    }
+
     public  void loadDataset(){
-        Pair<String[], double[][]> dataPair = DataReader.readCSV(inputPath, nVectors, nDimensions, true, partition, null);
+        Pair<String[], double[][]> dataPair = inputHandler.readCSV(inputPath, nVectors, nDimensions, true, partition, null);
         headers = dataPair.x;
         data = dataPair.y;
 

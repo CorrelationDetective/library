@@ -12,6 +12,8 @@ import queries.ResultTuple;
 import java.io.*;
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -797,6 +799,29 @@ public class lib {
     }
 
     /**
+     * Remove an element from an array.
+     * @param a The input array.
+     * @param index The index of the element to remove.
+     * @param <T> The type of elements in the array.
+     * @return The array with the element removed.
+     */
+    public static <T> T[] remove(T[] a, int index){
+        T[] c = Arrays.copyOf(a, a.length - 1);
+        System.arraycopy(a, index + 1, c, index, a.length - index - 1);
+        return c;
+    }
+
+//    Checks if a certain path string is valid
+    public static boolean isValidPath(String path){
+        try {
+            Paths.get(path);
+        } catch (InvalidPathException | NullPointerException ex) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Generate a random number from the Cauchy distribution.
      *
      * @param random The random number generator.
@@ -981,24 +1006,22 @@ public class lib {
     }
 
     /**
-     * Write a string to a file.
-     *
-     * @param string   The string to write.
-     * @param outPath  The path to the output file.
+     * Parse a config file into a map of key-value pairs.
+     * @param filename The name of the config file to parse.
+     *                 The config file should be in the format of key-value pairs separated by an equals sign.
+     * @return A map of key-value pairs parsed from the config file.
      */
-    public static void stringToFile(String string, String outPath){
+    public static Properties parseConfig(String filename){
+        Properties config = new Properties();
         try {
-//            Optionally make root directories
-            String rootdirname = outPath.substring(0, outPath.lastIndexOf("/"));
-            new File(rootdirname).mkdirs();
-
-            FileWriter resultWriter = new FileWriter(outPath);
-            resultWriter.write(string);
-            resultWriter.close();
-        } catch (Exception e) {
+            config.load(new FileInputStream(filename));
+        } catch (IOException e) {
             e.printStackTrace();
         }
+        return config;
     }
+
+
 
 
 }

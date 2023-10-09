@@ -17,6 +17,7 @@ public class MainTest {
      */
 
     String inputPath = "/home/jens/tue/data/stock/1620daily/stocks_1620daily_logreturn_deduped.csv";
+    String outputPath = "";
     String simMetricName = "pearson_correlation";
     String maxPLeft = "1";
     String maxPRight = "2";
@@ -27,6 +28,7 @@ public class MainTest {
     public void testMissingRequiredArguments(){
         String[] args = new String[]{
                 inputPath,
+                outputPath,
                 simMetricName,
                 maxPLeft,
         };
@@ -42,6 +44,7 @@ public class MainTest {
     public void testWronglyFormattedAbbreviatedArguments(){
         String[] args = new String[]{
                 inputPath,
+                outputPath,
                 simMetricName,
                 maxPLeft,
                 maxPRight,
@@ -58,6 +61,7 @@ public class MainTest {
     public void testWronglyFormattedNamedArguments(){
         String[] args = new String[]{
                 inputPath,
+                outputPath,
                 simMetricName,
                 maxPLeft,
                 maxPRight,
@@ -73,6 +77,7 @@ public class MainTest {
     public void testCorrectRequiredAbbreviatedArguments(){
         String[] args = new String[]{
                 inputPath,
+                outputPath,
                 simMetricName,
                 maxPLeft,
                 maxPRight,
@@ -93,6 +98,7 @@ public class MainTest {
     public void testCorrectRequiredNamedArguments(){
         String[] args = new String[]{
                 inputPath,
+                outputPath,
                 simMetricName,
                 maxPLeft,
                 maxPRight,
@@ -112,6 +118,7 @@ public class MainTest {
     public void testCorrectRequiredArgumentsPlusExtraArguments(){
         String[] args = new String[]{
                 inputPath,
+                outputPath,
                 simMetricName,
                 maxPLeft,
                 maxPRight,

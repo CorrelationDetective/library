@@ -29,6 +29,7 @@ public abstract class Baseline extends Algorithm {
     public ResultSet run() {
         //        Initialize the parameters
         runParameters.init();
+        printRunParameters();
 
         StageRunner stageRunner = new StageRunner();
 

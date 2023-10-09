@@ -63,6 +63,30 @@ Before using Correlation Detective, make sure you have the following prerequisit
 **Note:** The following examples are also implemented as a unit test in src.test.java.library.LibraryUsageTest.java.
 You can run this test to see the examples in action.
 
+## Input Format
+Correlation Detective expects the input data to be in CSV format, either in row-major or column-major order.
+
+**Row-major format:** When in row-major format, the first row of the CSV file should contain the names of the vectors, 
+with the first column containing the names of the dimensions.
+For example, the following CSV file contains 3 vectors (A, B, C) with 4 dimensions (x, y, z, w):
+```csv
+,x,y,z,w
+A,1,2,3,4
+B,5,6,7,8
+C,9,10,11,12
+```
+
+**Column-major format:** When in column-major format, the first column of the CSV file should contain the names of the vectors,
+with the first row containing the names of the dimensions.
+For example, the following CSV file contains 3 vectors (A, B, C) with 4 dimensions (x, y, z, w):
+```csv
+,A,B,C
+x,1,5,9
+y,2,6,10
+z,3,7,11
+w,4,8,12
+```
+
 ### Initializing the CorrelationDetective Object
 To get started with Correlation Detective, you need to initialize a 'CorrelationDetective' object. You can do this in two ways:
 

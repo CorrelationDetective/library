@@ -5,8 +5,11 @@ import algorithms.Algorithm;
 import algorithms.baselines.SimpleBaseline;
 import algorithms.baselines.SmartBaseline;
 import algorithms.performance.CorrelationDetective;
+import data_io.DataHandler;
+import queries.ResultSet;
 import similarities.SimEnum;
 
+import javax.xml.crypto.Data;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -15,19 +18,21 @@ public class Main {
 //        Run default query
         if (args.length == 0){
             args = new String[]{
-                    "--inputPath=" + "/home/jens/tue/data/stock/1620daily/stocks_1620daily_logreturn_deduped.csv",
-                    "--simMetricName=" + "pearson_correlation",
-                    "--maxPLeft=" + "1",
-                    "--maxPRight=" + "2",
-                    "--n=" + "100",
+                    "s3://correlation-detective/example_data.csv",
+                    "s3://correlation-detective",
+                    "pearson_correlation",
+                    "1",
+                    "2",
             };
         }
 
+//        Set minio environment variables
+        System.setProperty("MINIO_ENDPOINT_URL", "http://localhost:9000");
+        System.setProperty("MINIO_ACCESS_KEY", "minioadmin");
+        System.setProperty("MINIO_SECRET_KEY", "minioadmin");
+
 //        Read parameters from args
         RunParameters runParameters = parseArgs(args);
-
-//        Initialize the parameters and logger
-        runParameters.init();
 
 //        Run the query
         run(runParameters);
@@ -37,12 +42,12 @@ public class Main {
         // Parse necessary arguments (and delete them from the list)
         RunParameters runParameters = parseRequired(args);
 
-        if (args.length == 4){
+        if (args.length == 5){
             return runParameters;
         }
 
         // Iterate through the optional command-line arguments
-        for (int i=4; i<args.length; i++) {
+        for (int i=5; i<args.length; i++) {
             try {
                 String arg = args[i];
                 if (arg.startsWith("--")) {
@@ -76,9 +81,19 @@ public class Main {
         String inputInstructions = ", mind that the first 5 arguments should be <inputPath> <outputPath> <simMetricName> <maxPLeft> <maxPRight>";
 
         // Parse necessary arguments (first 5 non-named or abbreviated arguments)
-        if (args.length < 4){
+        if (args.length < 5){
             throw new InputMismatchException("Not enough arguments" + inputInstructions);
         }
+
+//        First extract the output path (and delete it from the list)
+        String outputPath = args[1];
+        args = lib.remove(args, 1);
+
+//        Check if output path is valid
+        if (!lib.isValidPath(outputPath)){
+            throw new InputMismatchException("Invalid output path: " + outputPath);
+        }
+
         int i = 0;
         try {
             String inputPath = args[i++];
@@ -86,7 +101,10 @@ public class Main {
             int maxPLeft = Integer.parseInt(args[i++]);
             int maxPRight = Integer.parseInt(args[i++]);
 
-            return new RunParameters(inputPath, simMetricName, maxPLeft, maxPRight);
+            RunParameters rp = new RunParameters(inputPath, simMetricName, maxPLeft, maxPRight);
+            rp.setOutputPath(outputPath);
+
+            return rp;
         } catch (NumberFormatException e){
             throw new InputMismatchException("Invalid format for option: " + args[i] + inputInstructions);
         }
@@ -112,9 +130,7 @@ public class Main {
     }
 
     private static void run(RunParameters runParameters) {
-        Logger.getGlobal().info(String.format("---- Running %s %s query with pattern (%d,%d) on %d vectors",
-                runParameters.getSimMetricName(), runParameters.getAlgorithm(), runParameters.getMaxPLeft(),
-                runParameters.getMaxPRight(), runParameters.getNVectors()));
+
 
         Algorithm algorithm;
         switch (runParameters.getAlgorithm()){
@@ -123,7 +139,26 @@ public class Main {
             case SMART_BASELINE: algorithm = new SmartBaseline(runParameters); break;
         }
 
-        //        Print the results as json
-        System.out.println(algorithm.getRunJson());
+//        Run the algorithm
+        algorithm.run();
+
+//        Save the results and stats
+        saveResults(runParameters, runParameters.getOutputPath());
+    }
+
+    private static void saveResults(RunParameters runParameters, String outputPath){
+//        Add a random run identifier to the outputPath
+        outputPath += "/" + UUID.randomUUID().toString();
+        Logger.getGlobal().info("Saving results and stats to " + outputPath);
+
+        DataHandler outputHandler = runParameters.getOutputHandler();
+        StatBag statBag = runParameters.getStatBag();
+        ResultSet resultSet = runParameters.getResultSet();
+
+//        Save the statBag as a json file
+        outputHandler.writeToFile(outputPath + "/stats.json", statBag.toJson());
+
+//        Save the results as a json file
+        outputHandler.writeToFile(outputPath + "/results.json", resultSet.toJson());
     }
 }

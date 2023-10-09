@@ -14,12 +14,14 @@ public abstract class GeneralTest {
     @Before
     public void setUp() {
         String inputPath = "/home/jens/tue/data/stock/1620daily/stocks_1620daily_logreturn_deduped.csv";
+        String outputPath = "";
         SimEnum simMetricName = SimEnum.PEARSON_CORRELATION;
         int maxPLeft = 1;
         int maxPRight = 2;
 
         runParameters = new RunParameters(inputPath, simMetricName, maxPLeft, maxPRight);
 
+        runParameters.setOutputPath(outputPath);
         runParameters.setLogLevel(Level.SEVERE);
         runParameters.setNVectors(100);
         runParameters.setNDimensions(1307);

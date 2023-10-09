@@ -27,6 +27,7 @@ public class LibraryUsageTest {
     public void testLibraryUsage() {
 //        Define necessary parameters (see docs for more info)
         String inputPath = "/home/jens/tue/data/stock/1620daily/stocks_1620daily_logreturn_deduped.csv";
+        String outputPath = "";
         SimEnum simMetricName = SimEnum.PEARSON_CORRELATION;
         int maxPLeft = 1;
         int maxPRight = 2;
