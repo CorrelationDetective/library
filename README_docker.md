@@ -7,6 +7,8 @@ Correlation Detective is a fast and scalable family of algorithms for finding in
 - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
 - [Usage](#usage)
+    - [Input Format](#input-format)
+        - [Accessing input/output data](#accessing-inputoutput-data)
     - [Running the Query](#running-the-query)
     - [Example](#example)
 - [License](#license)

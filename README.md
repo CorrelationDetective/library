@@ -10,6 +10,7 @@ Correlation Detective is a fast and scalable family of algorithms for finding in
         - [Option 1: Install using Maven](#option-1-install-using-maven)
         - [Option 2: Clone the Correlation Detective github repository](#option-2-clone-the-correlation-detective-github-repository)
 - [Usage](#usage)
+    - [Input Format](#input-format) 
     - [Initializing the CorrelationDetective Object](#initializing-the-correlationdetective-object)
     - [Running the Query](#running-the-query)
     - [Interacting with the ResultSet](#interacting-with-the-resultset)
