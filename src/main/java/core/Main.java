@@ -151,6 +151,9 @@ public class Main {
         outputPath += "/" + UUID.randomUUID().toString();
         Logger.getGlobal().info("Saving results and stats to " + outputPath);
 
+//        Create the output directory
+        lib.createDir(outputPath);
+
         DataHandler outputHandler = runParameters.getOutputHandler();
         StatBag statBag = runParameters.getStatBag();
         ResultSet resultSet = runParameters.getResultSet();

@@ -92,8 +92,8 @@ public class RunParameters {
             @Getter private  String[] headers;
             @Getter private  double[][] data;
             @Getter @Setter private double[][] orgData;
-    @Expose @Between(min = 1, max = Integer.MAX_VALUE) @Getter @Setter private  int nVectors = (int) 1e9;
-    @Expose @Between(min = 1, max = Integer.MAX_VALUE) @Getter @Setter private  int nDimensions = (int) 1e9;
+    @Expose @Between(min = 1, max = Integer.MAX_VALUE) @Getter @Setter private  int nVectors = 1000;
+    @Expose @Between(min = 1, max = Integer.MAX_VALUE) @Getter @Setter private  int nDimensions = (int) 1e6;
     @Expose @Between(min = 0, max = Integer.MAX_VALUE) @Getter @Setter private  int partition;
 
 //  ---------------------------  Dimensionality reduction ---------------------------

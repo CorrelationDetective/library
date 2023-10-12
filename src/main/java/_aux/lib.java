@@ -1021,6 +1021,24 @@ public class lib {
         return config;
     }
 
+    /**
+    * Create a new directory
+     * @param dirName The name of the directory to create.
+     * @return True if the directory was created successfully, otherwise false.
+     * @throws IOException
+     */
+    public static boolean createDir(String dirName){
+        try{
+            File dir = new File(dirName);
+            if (!dir.exists()) {
+                return dir.mkdirs();
+            }
+            return false;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 
 
