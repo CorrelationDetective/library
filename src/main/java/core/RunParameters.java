@@ -3,6 +3,7 @@ package core;
 import _aux.Pair;
 import algorithms.AlgorithmEnum;
 import bounding.BoundDiscounting;
+import bounding.ClusterCombination;
 import bounding.RecursiveBounding;
 import clustering.ClusteringAlgorithmEnum;
 import clustering.HierarchicalClustering;
@@ -112,6 +113,8 @@ public class RunParameters {
 //  ---------------------------  Bounding ---------------------------
     @Expose @Getter @Setter private  boolean empiricalBounding = true;
             @Getter @Setter private RecursiveBounding RB;
+    @Getter PriorityQueue<ClusterCombination> postponedDCCs =
+            new PriorityQueue<>(10000, Comparator.comparingDouble(ClusterCombination::getCriticalShrinkFactor));
 
 //  ---------------------------  Clustering ---------------------------
             @Getter @Setter private HierarchicalClustering HC;

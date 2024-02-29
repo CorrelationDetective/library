@@ -148,7 +148,6 @@ public class RecursiveBoundingTest extends GeneralTest {
         runParameters.setIrreducibility(false);
         runParameters.init(false);
         runParameters.setRunningThreshold(new RunningThreshold(.67));
-        RecursiveBoundingTask.resetPostponedDCCs();
 
         Cluster C1 = HC.singletonClusters[19].getParent();
         Cluster C2 = HC.singletonClusters[75].getParent();
@@ -164,13 +163,13 @@ public class RecursiveBoundingTest extends GeneralTest {
         CC.bound(runParameters);
 
         //    Test postponed DCCs
-        Assert.assertEquals(1, RecursiveBoundingTask.postponedDCCs.size());
+        Assert.assertEquals(1, runParameters.getPostponedDCCs().size());
 
-        for (ClusterCombination postponedDCC: RecursiveBoundingTask.postponedDCCs) {
+        for (ClusterCombination postponedDCC: runParameters.getPostponedDCCs()) {
             Assert.assertTrue(postponedDCC.isDecisive());
             Assert.assertNotEquals(postponedDCC.bounds.getUB(), postponedDCC.getShrunkUB(0, runParameters.getBFSFactor()), 0.001);
         }
-        ClusterCombination postponedDCC = RecursiveBoundingTask.postponedDCCs.peek();
+        ClusterCombination postponedDCC = runParameters.getPostponedDCCs().peek();
 
 //        Now process postponed DCCs
         runParameters.setShrinkFactor(1);

@@ -1022,7 +1022,7 @@ public class lib {
     }
 
     /**
-    * Create a new directory
+     * Create a new directory
      * @param dirName The name of the directory to create.
      * @return True if the directory was created successfully, otherwise false.
      * @throws IOException
@@ -1039,6 +1039,7 @@ public class lib {
             return false;
         }
     }
+
 
 
 

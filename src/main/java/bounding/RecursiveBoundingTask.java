@@ -20,13 +20,6 @@ import java.util.stream.Collectors;
 public class RecursiveBoundingTask extends RecursiveAction {
     @NonNull private final ClusterCombination CC;
     @NonNull private final RunParameters runParameters;
-    public static PriorityQueue<ClusterCombination> postponedDCCs =
-            new PriorityQueue<>(10000, Comparator.comparingDouble(ClusterCombination::getCriticalShrinkFactor));
-
-
-    public static void resetPostponedDCCs(){
-        postponedDCCs = new PriorityQueue<>(10000, Comparator.comparingDouble(ClusterCombination::getCriticalShrinkFactor));
-    }
 
     @Override
     protected void compute() {
@@ -102,6 +95,7 @@ public class RecursiveBoundingTask extends RecursiveAction {
 //            Negative DCC, postpone for later if actual UB is above threshold (actually indecisive)
             if (shrunkUB < threshold) {
                 if (canCC.bounds.getUB() > threshold) {
+                    PriorityQueue<ClusterCombination> postponedDCCs = runParameters.getPostponedDCCs();
                     synchronized (postponedDCCs) {
                         postponedDCCs.add(canCC);
                     }
