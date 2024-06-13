@@ -113,7 +113,7 @@ public abstract class DataHandler {
                 String secondLine = br.readLine();
                 String[] secondLineSplit = secondLine.split(delimiter);
 
-                if (lib.isNumeric(secondLineSplit[0])) {
+                if (lib.isNumeric(secondLineSplit[1])) {
                     return readColumnMajorCSV(path, n, maxDim, skipVar, partition);
                 } else {
                     return readRowMajorCSV(path, n, maxDim, skipVar, partition);
@@ -136,10 +136,10 @@ public abstract class DataHandler {
 //            Get Header
             String firstLine = br.readLine();
             String[] header = firstLine.split(delimiter);
-            int maxN = header.length;
+            int maxN = header.length - 1;
             int effN = FastMath.min(maxN, n);
 
-//            Parse data
+//            Parse data (skip index column)
             LinkedList<Double>[] rows = new LinkedList[maxN];
             IntStream.range(0, maxN).forEach(i -> rows[i] = new LinkedList<>());
 
@@ -151,12 +151,12 @@ public abstract class DataHandler {
             while (br.ready() & m < maxDim) {
                 String[] line = br.readLine().split(delimiter);
 //                Distribute values over columns
-                for (int i = 0; i < maxN; i++) {
+                for (int i = 1; i < line.length; i++) {
                     if (line[i].equals("nan")) {
                         System.out.println("nan value");
                     }
 
-                    rows[i].add(Double.parseDouble(line[i]));
+                    rows[i-1].add(Double.parseDouble(line[i]));
                 }
                 m++;
             }

@@ -17,12 +17,20 @@ public class Main {
     public static void main(String[] args) {
 //        Run default query
         if (args.length == 0){
+//            args = new String[]{
+//                    "s3://correlation-detective/example_data.csv",
+//                    "s3://correlation-detective",
+//                    "pearson_correlation",
+//                    "1",
+//                    "2",
+//            };
             args = new String[]{
-                    "s3://correlation-detective/example_data.csv",
-                    "s3://correlation-detective",
-                    "pearson_correlation",
+                    "/home/jens/ownCloud/Documents/3.Werk/0.TUe_Research/0.STELAR/1.Agroknow/data/weekly.csv",
+                    "/home/jens/ownCloud/Documents/3.Werk/0.TUe_Research/0.STELAR/1.Agroknow/data/output",
+                    "spearman_correlation",
                     "1",
                     "2",
+                    "--topK=20"
             };
         }
 

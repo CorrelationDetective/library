@@ -7,7 +7,6 @@ import org.apache.commons.math3.util.FastMath;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
@@ -22,15 +21,15 @@ public class DataReader {
         switch (dataType){
             case "weather_slp": {
                 dataPath = String.format("%s/weather/1620_daily/slp_1620daily_filled_T.csv", inputPath);
-                dataPair = DataReader.readCSV(dataPath, n, m, true, partition, false);
+                dataPair = DataReader.readRowMajorCSV(dataPath, n, m, true, partition);
             } break;
             case "weather_tmp": {
                 dataPath = String.format("%s/weather/1620_daily/tmp_1620daily_filled_T.csv", inputPath);
-                dataPair = DataReader.readCSV(dataPath, n, m, true, partition, false);
+                dataPair = DataReader.readRowMajorCSV(dataPath, n, m, true, partition);
             } break;
             case "weather_comet": {
                 dataPath = String.format("%s/weather/comet/comet_slp_row.csv", inputPath);
-                dataPair = DataReader.readCSV(dataPath, n, m, true, partition, false);
+                dataPair = DataReader.readRowMajorCSV(dataPath, n, m, true, partition);
             } break;
             case "fmri": {
                 int[] n_steps = new int[]{237, 509, 1440, 3152, 9700};
@@ -45,7 +44,7 @@ public class DataReader {
                 dataPath = dataPaths[FastMath.min(n, 4)];
 
                 n = n_steps[n];
-                dataPair = DataReader.readCSV(dataPath, n, m, n < 9700, partition, false);
+                dataPair = DataReader.readRowMajorCSV(dataPath, n, m, n < 9700, partition);
             } break;
             case "crypto": {
                 dataPath = String.format("%s/crypto/crypto_3h_logreturn_new.csv", inputPath);
@@ -53,27 +52,27 @@ public class DataReader {
             }break;
             case "deep": {
                 dataPath = String.format("%s/deep/deep10K.csv", inputPath);
-                dataPair = DataReader.readCSV(dataPath, n, m, true, partition,  false);
+                dataPair = DataReader.readRowMajorCSV(dataPath, n, m, true, partition);
             } break;
             case "stocklog": default: {
                 dataPath = String.format("%s/stock/1620daily/stocks_1620daily_logreturn_deduped.csv", inputPath);
-                dataPair = DataReader.readCSV(dataPath, n, m, true, partition,  false);
+                dataPair = DataReader.readRowMajorCSV(dataPath, n, m, true, partition);
             } break;
             case "stock": {
                 dataPath = String.format("%s/stock/1620daily/stocks_1620daily_interpolated_deduped.csv", inputPath);
-                dataPair = DataReader.readCSV(dataPath, n, m, true, partition, false );
+                dataPair = DataReader.readRowMajorCSV(dataPath, n, m, true, partition);
             } break;
             case "random": {
                 dataPath = String.format("%s/random/random_n50000_m1000_seed0.csv", inputPath);
-                dataPair = DataReader.readCSV(dataPath, n, m, true, partition,  false);
+                dataPair = DataReader.readRowMajorCSV(dataPath, n, m, true, partition);
             } break;
             case "stocklog_old": {
                 dataPath = String.format("%s/stock/202004_10min/logreturn/base.csv", inputPath);
-                dataPair = DataReader.readCSV(dataPath, n, m, true, partition, true);
+                dataPair = DataReader.readColumnMajorCSV(dataPath, n, m, true, partition);
             } break;
             case "stock_old": {
                 dataPath = String.format("%s/stock/202004_10min/interpolated/base.csv", inputPath);
-                dataPair = DataReader.readCSV(dataPath, n, m, true, partition, true);
+                dataPair = DataReader.readColumnMajorCSV(dataPath, n, m, true, partition);
             } break;
         }
 
@@ -81,44 +80,8 @@ public class DataReader {
     }
 
 
-    /**
-     * Reads a CSV file by adaptively checking if the data is row or column major.
-     * If the data is row major, it is read using {@link #readRowMajorCSV(String, int, int, boolean, int)}.
-     * If the data is column major, it is read using {@link #readColumnMajorCSV(String, int, int, boolean, int)}.
-     * Otherwise, an exception is thrown.
-     */
-    public static Pair<String[], double[][]> readCSV(String path, int n, int maxDim, boolean skipVar, int partition, Boolean columnMajor){
-//        Check if csv file
-        if (!path.endsWith(".csv")){
-            throw new InputMismatchException("File is not a CSV file: " + path);
-        }
-
-//        If columnMajor argument is null, infer
-        if (columnMajor == null) {
-//        Read the second line, if it starts with a number, it is column major, if it starts with a string it is row major
-            String delimiter = ",";
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(path));
-                String firstLine = br.readLine();
-                String secondLine = br.readLine();
-                String[] secondLineSplit = secondLine.split(delimiter);
-
-                if (lib.isNumeric(secondLineSplit[0])) {
-                    return readColumnMajorCSV(path, n, maxDim, skipVar, partition);
-                } else {
-                    return readRowMajorCSV(path, n, maxDim, skipVar, partition);
-                }
-            } catch (Exception e) {
-                throw new InputMismatchException("Could not read CSV file: " + path + ", please check the format of the file.\n" + e.getMessage());
-            }
-        } else if (columnMajor) {
-            return readColumnMajorCSV(path, n, maxDim, skipVar, partition);
-        } else {
-            return readRowMajorCSV(path, n, maxDim, skipVar, partition);
-        }
-    }
-
-    private static Pair<String[], double[][]> readColumnMajorCSV(String path, int n, int maxDim, boolean skipVar, int partition) {
+//    TODO MAKE THIS ADAPTIVE -- AUTOMATICALLY DETECT COLUMN/ROW MAJOR DATA
+    public static Pair<String[], double[][]> readColumnMajorCSV(String path, int n, int maxDim, boolean skipVar, int partition) {
         String delimiter = ",";
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
@@ -176,7 +139,7 @@ public class DataReader {
         return null;
     }
 
-    private static Pair<String[], double[][]> readRowMajorCSV(String path, int maxN, int maxDim, boolean skipVar, int partition) {
+    public static Pair<String[], double[][]> readRowMajorCSV(String path, int maxN, int maxDim, boolean skipVar, int partition) {
         String delimiter = ",";
 
         try {

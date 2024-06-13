@@ -2,17 +2,29 @@ package data_reading;
 
 import _aux.GeneralTest;
 import _aux.Pair;
+import clustering.HierarchicalClustering;
+import core.Main;
+import core.Parameters;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import similarities.functions.EuclideanSimilarity;
 
-public class DataReaderTest {
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import static core.Parameters.*;
+
+public class DataReaderTest extends GeneralTest {
 
 
-     private void testDataSet(String dataType, int n, double[] targetVector0, double[] targetVector1, String targetHeader){
-        int m = targetVector0.length;
-        String inputPath = "/home/jens/tue/data";
+    @Before
+    public void setUp(){
+        super.setUp();
+        m = 10;
+    }
 
+
+    private void testDataSet(String dataType, int n, double[] targetVector0, double[] targetVector1, String targetHeader){
         //      ----------------------------------------- TESTS ---------------------------------------------
 
 //        Test 1: Test if dataReader reads the right file and skips based on variance as expected
@@ -31,7 +43,7 @@ public class DataReaderTest {
         double[] targetVector1 = new double[]{1565.0, 1515.0, 1505.0, 1505.0, 1510.0, 1510.0, 1510.0, 1510.0, 1515.0, 1515.0};
         String targetHeader = "8836.Asien--Australien--Südamerika--Afrika-Japan-Hokuetsu-Metal-Co.-Ltd._049497";
 
-        testDataSet("stock",10,  targetVector0, targetVector1, targetHeader);
+        testDataSet("stock", n, targetVector0, targetVector1, targetHeader);
     }
 
     @Test
@@ -52,7 +64,7 @@ public class DataReaderTest {
         double[] targetVector1 = new double[]{10110.0, 10151.0, 10171.0, 10171.0, 10144.0, 10192.0, 10156.0, 10068.0, 10050.0, 10076.0};
         String targetHeader = "1026099999";
 
-        testDataSet("weather_slp", 10, targetVector0, targetVector1, targetHeader);
+        testDataSet("weather_slp", n, targetVector0, targetVector1, targetHeader);
     }
 
     @Test
@@ -61,7 +73,7 @@ public class DataReaderTest {
         double[] targetVector1 = new double[]{-79.0, -139.0, -158.0, -142.0, -113.0, -36.0, -39.0, -140.0, -165.0, -129.0};
         String targetHeader = "1026099999";
 
-        testDataSet("weather_tmp", 10, targetVector0, targetVector1, targetHeader);
+        testDataSet("weather_tmp", n, targetVector0, targetVector1, targetHeader);
     }
 
     @Test
@@ -70,7 +82,7 @@ public class DataReaderTest {
         double[] targetVector1 = new double[]{0.627, 0.836, 0.894, 0.523, 0.353, 0.254, 0.024, 0.818, 0.362, 0.213};
         String targetHeader = "0";
 
-        testDataSet("random", 10, targetVector0, targetVector1, targetHeader);
+        testDataSet("random", n, targetVector0, targetVector1, targetHeader);
     }
 
     @Test
@@ -79,6 +91,6 @@ public class DataReaderTest {
         double[] targetVector1 = new double[]{-0.0325, -0.0066, 0.0, 0.0033, 0.0, 0.0, 0.0, 0.0033, 0.0, 0.0293};
         String targetHeader = "8836.Asien--Australien--Südamerika--Afrika-Japan-Hokuetsu-Metal-Co.-Ltd._049497";
 
-        testDataSet("stock_log", 10, targetVector0, targetVector1, targetHeader);
+        testDataSet("stock_log", n, targetVector0, targetVector1, targetHeader);
     }
 }

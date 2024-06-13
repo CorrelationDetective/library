@@ -234,23 +234,28 @@ public class lib {
     }
 
     /**
-     * Computes the ranks of elements in an array.
+     * Computes the ranks of elements in an array, breaking ties by averaging.
      *
      * @param in The input array.
      * @return An array of ranks for the elements in the input array.
      */
     public static double[] rank(double[] in) {
-        Integer[] indexes = new Integer[in.length];
-        for (int i = 0; i < indexes.length; i++) {
-            indexes[i] = i;
-        }
-        Arrays.sort(indexes, new Comparator<Integer>() {
-            @Override
-            public int compare(final Integer i1, final Integer i2) {
-                return Double.compare(in[i1], in[i2]);
+        double[] ranks = new double[in.length];
+        double[] sorted = in.clone();
+        Arrays.sort(sorted);
+        HashMap<Double, Integer> rankMap = new HashMap<>();
+        HashMap<Double, Integer> countMap = new HashMap<>();
+        for (int i=0;i<sorted.length;i++) {
+            countMap.merge(sorted[i], 1, Integer::sum);
+            if (!rankMap.containsKey(sorted[i])) {
+                rankMap.put(sorted[i], i);
             }
-        });
-        return IntStream.range(0, indexes.length).mapToDouble(i -> indexes[i]).toArray();
+        }
+//        Normalize the ranks
+        for (int i=0;i<sorted.length;i++) {
+            ranks[i]=rankMap.get(in[i]) + (countMap.get(in[i])-1)/2.0;
+        }
+        return ranks;
     }
 
     /**
