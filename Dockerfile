@@ -11,8 +11,7 @@ COPY target/CorrelationDetective-1.0-jar-with-dependencies.jar /app/cd.jar
 RUN mkdir /app/data
 
 # Set the entrypoint to running the jar file
-ENTRYPOINT ["java", "-cp", "/app/cd.jar", "core/Main"]
+ENTRYPOINT ["java", "-cp", "cd.jar", "core/Main"]
 
 # Pass the arguments to the entrypoint
 CMD ["-h"]
-

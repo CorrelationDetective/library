@@ -74,7 +74,7 @@ public abstract class DataHandler {
                 dataPair = this.readCSV(dataPath, n, m, true, partition, false );
             } break;
             case "random": {
-                dataPath = String.format("%s/random/random_n50000_m1000_seed0.csv", inputPath);
+                dataPath = String.format("%s/random/random_n100_m1000_seed0_row.csv", inputPath);
                 dataPair = this.readCSV(dataPath, n, m, true, partition,  false);
             } break;
             case "stocklog_old": {

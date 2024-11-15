@@ -9,6 +9,7 @@ sql/
 how_to_publish_docker.md
 *.sh
 src/test/resources/
+test_docker.sh
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
