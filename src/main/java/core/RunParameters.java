@@ -7,6 +7,7 @@ import bounding.ClusterCombination;
 import bounding.RecursiveBounding;
 import clustering.ClusteringAlgorithmEnum;
 import clustering.HierarchicalClustering;
+import com.fasterxml.jackson.core.JsonToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -90,6 +91,7 @@ public class RunParameters {
             @Getter @Setter private  ResultSet resultSet;
 
 //  ---------------------------  Data ---------------------------
+            @Getter @Setter private boolean minio = false;
             @Getter private  String[] headers;
             @Getter private  double[][] data;
             @Getter @Setter private double[][] orgData;
@@ -183,6 +185,22 @@ public class RunParameters {
         }
     }
 
+    public void set(String key, String value) throws NoSuchFieldException, IllegalAccessException{
+        //        Set a parameter value, if parameter is enum, make all caps and parse it
+        java.lang.reflect.Field field = RunParameters.class.getDeclaredField(key);
+        field.setAccessible(true);
+
+        if (field.getType() == boolean.class){
+            field.set(this, Boolean.parseBoolean(value));
+        } else if (field.getType() == int.class){
+            field.set(this, Integer.parseInt(value));
+        } else if (field.getType() == double.class){
+            field.set(this, Double.parseDouble(value));
+        } else {
+            field.set(this, value);
+        }
+    }
+
 
 
     //    Check and correct parameter values for incorrect configs
@@ -248,11 +266,19 @@ public class RunParameters {
 
 //    Check dataset parameters
     private void checkDataParameters(){
+//        Check if minio credentials are set
+        minio = System.getenv("MINIO_ENDPOINT_URL") != null || System.getProperty("MINIO_ENDPOINT_URL") != null;
+
 //        Check which filesystem is used for input and output
-        inputHandler = inputPath.startsWith(S3_PREFIX) ? new MinioHandler(): new FileHandler();
-        if (outputPath != null){
-            outputHandler = outputPath.startsWith(S3_PREFIX) ? new MinioHandler(): new FileHandler();
+        if (inputPath.startsWith(S3_PREFIX)) { // clean path
+            inputPath = inputPath.replace(S3_PREFIX, "");
         }
+        if (outputPath != null && outputPath.startsWith(S3_PREFIX)) { // clean path
+            outputPath = outputPath.replace(S3_PREFIX, "");
+        }
+
+        inputHandler = minio ? new MinioHandler(): new FileHandler();
+        outputHandler = inputHandler;
     }
 
     public  void loadDataset(){

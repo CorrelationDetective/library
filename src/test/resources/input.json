@@ -1,0 +1,21 @@
+{
+  "docket_image": "correlationdetective/correlationdetective:latest",
+  "input": [{
+    "path": "agroknow/A5/weekly.csv",
+    "name": "List of time series data"
+  }],
+  "parameters": {
+    "outputPath": "agroknow/A5/output/test",
+    "simMetricName": "spearman_correlation",
+    "maxPLeft": 2,
+    "maxPRight": 2,
+    "topK": 20,
+    "seed": 1
+  },
+  "minio": {
+    "id": "b7qqc9p1JpKRY7Z7GYXA",
+    "key": "xu9gwGYDFYbdDKHKR3bI5N4SSOsT9OlrnHcFOFKH",
+    "endpoint_url": "https://api-s3-ak.stelar.gr"
+  },
+  "tags": []
+}

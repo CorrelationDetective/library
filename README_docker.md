@@ -96,12 +96,11 @@ The list of available query parameters can be found in [PARAMETERS.md](PARAMETER
 We refer to our [paper](https://vldb.org/pvldb/vol15/p1266-papapetrou.pdf) for more details about the parameters and their effects on the algorithm.
 
 ### Example
-We want to run a *Multipole(4)* *threshold* query with a threshold of 0.85, including the irreducibility constraint.
-Our data is located locally at `/home/user/data`.
+We want to run a *Multipole(4)* *threshold* query with a threshold of 0.85, including the irreducibility constraint
 We run this query as follows:
 
 ```bash
-docker run -it -v /home/user/data:/data correlationdetective/correlationdetective /data/input_file.csv /data/output_file Multipole 4 0 --queryType=THRESHOLD --tau=0.85 -irreducibility
+docker run -it correlationdetective/correlationdetective <inputPath> <outputPath> Multipole 4 0 --queryType=THRESHOLD --tau=0.85 -irreducibility
 ```
 
 That's it! You are now ready to use Correlation Detective to discover interesting multivariate correlations in your vector datasets.

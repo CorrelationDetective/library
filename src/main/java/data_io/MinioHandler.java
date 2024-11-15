@@ -87,18 +87,18 @@ public class MinioHandler extends DataHandler {
 
 //    Make sure the path is in the format "s3:/bucket_name/file_name"
     private String checkPath(String path){
-        if (!path.startsWith(RunParameters.S3_PREFIX)){
-            throw new IllegalArgumentException("Path must start with " + RunParameters.S3_PREFIX);
-        }
+//        if (!path.startsWith(RunParameters.S3_PREFIX)){
+//            throw new IllegalArgumentException("Path must start with " + RunParameters.S3_PREFIX);
+//        }
 
 //        Make sure bucket exists
-        String bucketName = path.split("/")[2];
+        String bucketName = path.split("/")[0];
         if (!this.bucketExists(bucketName)){
             throw new IllegalArgumentException("Bucket '" + bucketName + "' does not exist");
         }
 
 //        Remove the S3 prefix from path
-        path = path.substring(RunParameters.S3_PREFIX.length());
+//        path = path.substring(RunParameters.S3_PREFIX.length());
         return path;
     }
 

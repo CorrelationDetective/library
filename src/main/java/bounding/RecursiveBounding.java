@@ -121,7 +121,14 @@ public class RecursiveBounding {
 
             // Now iterate over approximated DCCs without shrinking, starting with highest priority
             runParameters.setShrinkFactor(1);
-            runCCs(new FastArrayList<>(runParameters.getPostponedDCCs()));
+
+//            Get and empty postponed DCCs
+            PriorityQueue<ClusterCombination> postponedDCCs = runParameters.getPostponedDCCs();
+            FastArrayList<ClusterCombination> postponedDCCsList = new FastArrayList<>(postponedDCCs.size());
+            while (!postponedDCCs.isEmpty()){
+                postponedDCCsList.add(postponedDCCs.poll());
+            }
+            runCCs(postponedDCCsList);
 
             DFSTime += (System.nanoTime() - startTime) / 1e9;
             Logger.getGlobal().info("Done with full scan, threshold now " +runningThreshold.get());
