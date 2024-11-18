@@ -22,11 +22,40 @@ Correlation Detective is a fast and scalable family of algorithms for finding in
     ```bash
     docker pull correlationdetective/correlationdetective
     ```
-2. Run the docker image (more information in #Usage):
+   
+2. Create the json file with the input parameters. This json should be of the following format:
+    
+```json
+{
+    "docket_image": "correlationdetective/correlationdetective:latest",
+    "input": [{
+        "path": "path/to/input.csv",
+        "name": "The name of the file to perform the multivariate correlation analysis on."
+    }],
+    "parameters": {
+        "outputPath": "path/to/output.csv",
+        "simMetricName": "pearson_correlation",
+        "maxPLeft": 2,
+        "maxPRight": 2
+    },
+    "minio": {
+        "id": <minio_access_key>,
+        "key": <minio_secret_key>,
+        "endpoint_url": <minio_endpoint_url>
+    },
+    "tags": []
+}
+```
+
+Note that the `minio` field is optional and should only be included if you are using an object storage bucket to store your data.
+Also, the parameters field in the above example only contains the required parameters. 
+It can be extended with additional query parameters as described in [PARAMETERS.md](PARAMETERS.md).
+
+3. Run the docker image (more information in #Usage):
 
     ```bash
-    docker run -it correlationdetective/correlationdetective <inputPath> <outputPath> <simMetricName> <maxPLeft> <maxPRight> ...
-    ```   
+    docker run -v path/to/jsons:/app/resources -it correlationdetective/correlationdetective resources/input.json resources/output.json
+    ```
 
 ## Usage
 
@@ -54,53 +83,38 @@ z,3,7,11
 w,4,8,12
 ```
 
-### Accessing input/output data
-The docker image can access data from either a *mounted volume* hosted on the host machine, or from an object storage bucket, such as AWS S3.
-
-**Mounted volume:**
-When using a mounted volume, the data directory on the host machine should be mounted to the container when running the docker image.
-For example, if the data directory is located at `/home/user/data`, the docker image should be run as follows:
-    ```bash
-    docker run -it -v /home/user/data:/data correlationdetective/correlationdetective <inputPath> <outputPath> <simMetricName> <maxPLeft> <maxPRight> ...
-    ```
-Note that the input and output paths should be the paths to the data directory in the container, in the format `/data/<pathToData>`.
-
-**Object storage bucket:**
-When using an object storage bucket, the input and output paths should be the paths to the bucket, in the format `s3://<bucketName>/<pathToData>`.
-Additionally, the algorithm will require access to the storage server credentials (e.g., AWS S3) of the user, 
-which should be passed to the docker image as environment variables. 
-For example, if the data is located on a MinIO server running at http://127.0.0.1:9000 and the access key is `minio` and the secret key is `minio123`, the docker image should be run as follows:
-    ```bash
-    docker run -it -e MINIO_ENDPOINT_URL=http://127.0.0.1:9000 -e MINIO_ACCESS_KEY=minio -e MINIO_SECRET_KEY=minio123 correlationdetective/correlationdetective <inputPath> <outputPath> <simMetricName> <maxPLeft> <maxPRight> ...
-    ```
-
-Note, the library currently supports MinIO as an object storage server. 
-Support for AWS S3 and Azure Blob Storage is planned to be released end of 2023.
-
 ### Running the Query
 To configure and run a specific query on your data with CD, you pass specific parameters when running the docker image.
-These optional query parameters should be passed after the required parameters (inputPath, outputPath, simMetricName, maxPLeft, maxPRight) and should be in the following form: 
-    ```bash
-    --<queryParameterName>=<queryParameterValue>
-    ```
-OR 
-    ```bash
-    -<queryParameterName> <queryParameterValue>
-    ```
-Boolean parameters should be passed as follows:
-    ```bash
-    -<queryParameterName>
-    ```
-
+These optional query parameters should be passed as part of the `parameters` field in the input json file. 
 The list of available query parameters can be found in [PARAMETERS.md](PARAMETERS.md).
 We refer to our [paper](https://vldb.org/pvldb/vol15/p1266-papapetrou.pdf) for more details about the parameters and their effects on the algorithm.
 
 ### Example
 We want to run a *Multipole(4)* *threshold* query with a threshold of 0.85, including the irreducibility constraint
-We run this query as follows:
+We run this query with the following input json:
 
-```bash
-docker run -it correlationdetective/correlationdetective <inputPath> <outputPath> Multipole 4 0 --queryType=THRESHOLD --tau=0.85 -irreducibility
+```json
+{
+    "docket_image": "correlationdetective/correlationdetective:latest",
+    "input": [{
+        "path": "bucket/data/input.csv",
+        "name": "The name of the file to perform the multivariate correlation analysis on."
+    }],
+    "parameters": {
+        "outputPath": "bucket/data/output",
+        "simMetricName": "multipole",
+        "maxPLeft": 4,
+        "maxPRight": 0,
+        "tau": 0.85,
+        "irreducibility": true
+    },
+    "minio": {
+        "id": "minio",
+        "key": "minio123",
+        "endpoint_url": "http://localhost:9000"
+    },
+    "tags": []
+}
 ```
 
 That's it! You are now ready to use Correlation Detective to discover interesting multivariate correlations in your vector datasets.
