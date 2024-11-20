@@ -2,9 +2,9 @@ package data_io;
 
 import _aux.lib;
 import core.RunParameters;
-import io.minio.*;
-import io.minio.errors.*;
-import io.minio.messages.Item;
+import data_io.minio.*;
+import data_io.minio.errors.*;
+import data_io.minio.messages.Item;
 import lombok.Getter;
 
 import java.io.BufferedReader;
@@ -20,13 +20,15 @@ public class MinioHandler extends DataHandler {
     private final String SERVER_ENDPOINT;
     private final String ACCESS_KEY;
     private final String SECRET_KEY;
+    private final String SESSION_TOKEN;
 
     @Getter private MinioClient minioClient;
 
-    public MinioHandler(String serverEndpoint, String accessKey, String secretKey) {
+    public MinioHandler(String serverEndpoint, String accessKey, String secretKey, String sessionToken){
         this.SERVER_ENDPOINT = serverEndpoint;
         this.ACCESS_KEY = accessKey;
         this.SECRET_KEY = secretKey;
+        this.SESSION_TOKEN = sessionToken;
 
 //        Initialize the Minio client
         initializeClient();
@@ -37,6 +39,7 @@ public class MinioHandler extends DataHandler {
         this.SERVER_ENDPOINT = config.getProperty("server_endpoint");
         this.ACCESS_KEY = config.getProperty("access_key");
         this.SECRET_KEY = config.getProperty("secret_key");
+        this.SESSION_TOKEN = config.getProperty("session_token");
 
         initializeClient();
     }
@@ -58,6 +61,7 @@ public class MinioHandler extends DataHandler {
         this.SERVER_ENDPOINT = System.getenv("MINIO_ENDPOINT_URL") == null ? System.getProperty("MINIO_ENDPOINT_URL") : System.getenv("MINIO_ENDPOINT_URL");
         this.ACCESS_KEY = System.getenv("MINIO_ACCESS_KEY") == null ? System.getProperty("MINIO_ACCESS_KEY") : System.getenv("MINIO_ACCESS_KEY");
         this.SECRET_KEY = System.getenv("MINIO_SECRET_KEY") == null ? System.getProperty("MINIO_SECRET_KEY") : System.getenv("MINIO_SECRET_KEY");
+        this.SESSION_TOKEN = System.getenv("MINIO_SESSION_TOKEN") == null ? System.getProperty("MINIO_SESSION_TOKEN") : System.getenv("MINIO_SESSION_TOKEN");
 
         initializeClient();
     }
@@ -66,7 +70,7 @@ public class MinioHandler extends DataHandler {
         try {
             this.minioClient = MinioClient.builder()
                     .endpoint(this.SERVER_ENDPOINT)
-                    .credentials(this.ACCESS_KEY, this.SECRET_KEY)
+                    .credentials(this.ACCESS_KEY, this.SECRET_KEY, this.SESSION_TOKEN)
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -115,7 +119,7 @@ public class MinioHandler extends DataHandler {
     public Iterable<Result<Item>> listObjects(String bucketName) {
         try {
             return minioClient.listObjects(
-                    io.minio.ListObjectsArgs.builder()
+                    ListObjectsArgs.builder()
                             .bucket(bucketName)
                             .build());
         } catch (Exception e) {

@@ -1,7 +1,7 @@
 package data_io;
 
-import io.minio.Result;
-import io.minio.messages.Item;
+import data_io.minio.Result;
+import data_io.minio.messages.Item;
 import org.junit.Before;
 import org.junit.Test;
 

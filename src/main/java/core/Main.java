@@ -28,7 +28,7 @@ public class Main {
 //        Run default query
         if (args.length == 0){
             args = new String[]{
-                    "/home/jens/ownCloud/Documents/3.Werk/0.TUe_Research/1.SimilarityDetective/X.GitHub/library/src/test/resources/input.json",
+                    "/home/jens/ownCloud/Documents/3.Werk/0.TUe_Research/1.SimilarityDetective/X.GitHub/library/src/test/resources/input_dev.json",
                     "/home/jens/ownCloud/Documents/3.Werk/0.TUe_Research/1.SimilarityDetective/X.GitHub/library/src/test/resources/output.json",
             };
         }
@@ -60,10 +60,13 @@ public class Main {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
+//            First print the input json as a string
+            System.out.println("Input json:" + lib.readFile(inputJsonPath));
+
             JsonNode jsonNode = objectMapper.readTree(new File(inputJsonPath));
 
 //            First parse the required arguments
-            String inputPath = jsonNode.get("input").get(0).get("path").asText();
+            String inputPath = jsonNode.get("input").get(0).asText();
             JsonNode parameters = jsonNode.get("parameters");
 
             String outputPath = parameters.get("outputPath").asText();
@@ -90,6 +93,10 @@ public class Main {
                 System.setProperty("MINIO_ENDPOINT_URL", minio.get("endpoint_url").asText());
                 System.setProperty("MINIO_ACCESS_KEY", minio.get("id").asText());
                 System.setProperty("MINIO_SECRET_KEY", minio.get("key").asText());
+
+                if (minio.has("skey")){
+                    System.setProperty("MINIO_SESSION_TOKEN", minio.get("skey").asText());
+                }
             }
 
             return runParameters;

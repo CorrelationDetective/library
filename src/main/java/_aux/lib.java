@@ -12,6 +12,7 @@ import queries.ResultTuple;
 import java.io.*;
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
+import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
 import java.util.*;
@@ -1043,6 +1044,18 @@ public class lib {
             e.printStackTrace();
             return false;
         }
+    }
+
+    /**
+     * Read a file and return its contents as a string.
+     */
+    public static String readFile(String filename){
+        try {
+            return Files.readString(Paths.get(filename));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

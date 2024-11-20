@@ -7,7 +7,6 @@ import bounding.ClusterCombination;
 import bounding.RecursiveBounding;
 import clustering.ClusteringAlgorithmEnum;
 import clustering.HierarchicalClustering;
-import com.fasterxml.jackson.core.JsonToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
