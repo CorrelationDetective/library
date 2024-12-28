@@ -5,6 +5,7 @@ import _aux.lib;
 import org.apache.commons.math3.util.FastMath;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.stream.IntStream;
@@ -179,6 +180,7 @@ public abstract class DataHandler {
                 finalRows = IntStream.range(0, effN).mapToObj(i -> rows[i].stream().mapToDouble(Double::doubleValue).toArray()).toArray(double[][]::new);
             }
 
+            header = Arrays.copyOfRange(header, 1, header.length);
             return new Pair<>(header, finalRows);
         } catch (Exception e) {
             e.printStackTrace();
