@@ -1,5 +1,5 @@
 DOCKER=docker
-IMGTAG=correlationdetective/correlationdetective:latest
+IMGTAG=img.stelar.gr/stelar/correlation-detective:latest
 IMGPATH=.
 DOCKERFILE=$(IMGPATH)/Dockerfile
 

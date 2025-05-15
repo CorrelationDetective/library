@@ -261,10 +261,14 @@ public class Main {
         outputJson.add("output", outputArray);
 
 //        Parameters
-        JsonObject metrics = new JsonObject();
-        metrics.add("statistics", runParameters.getStatBag().toJsonElement().getAsJsonObject());
-        metrics.add("run_parameters", runParameters.toJsonElement().getAsJsonObject());
-        outputJson.add("metrics", metrics);
+        JsonObject statistics = runParameters.getStatBag().toJsonElement().getAsJsonObject();
+        JsonObject parameters = runParameters.toJsonElement().getAsJsonObject();
+
+//        Now merge to one json object without nesting
+        for (Map.Entry<String, JsonElement> entry : parameters.entrySet()){
+            statistics.add(entry.getKey(), entry.getValue());
+        }
+        outputJson.add("metrics", statistics);
 
         outputJson.addProperty("status", 200);
 

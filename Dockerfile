@@ -4,6 +4,9 @@ LABEL authors="jens"
 # Set working directory
 WORKDIR /app
 
+# Create a jar file with dependencies
+RUN mvn clean package -DskipTests
+
 # Copy jar with dependencies
 COPY target/CorrelationDetective-1.0-jar-with-dependencies.jar /app/cd.jar
 
